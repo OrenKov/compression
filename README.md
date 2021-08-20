@@ -37,34 +37,51 @@ There system contains 2 ways for encoding and compressing the data:
 
 <strong>NOTE: </strong> Even if a word consists of an integer or a '$' sign, we will just read them as part of the word while decoding the list.<br>
 <strong>REMARK: </strong> By small modifications of the implementation, by using the same encoding method, it is possible to encode characters instead of complete words. 
+<br>
 
 ## How To Use
-* Download the KNN.py file, and import it to your python working-file.
+* Download the `Compression.py` file, and import it to your python working-file.
 * <strong>Initialize</strong>:
     ```sh
-    $ my_tree = KDTree(list_of_points, K)
+    $ my_compressor = HEncoder()
     ```
-* <strong>Get the approximated KNN</strong>:
+* <strong>Encode and compress a list of words</strong> (return a list of encoded words):
     ```sh
-    $ my_tree.knn(my_point)
+    $ encoding_table, encoded_list = my_compressor.encode(my_list)
     ```
-    where `my_point` is in `(x,y,z)` format.
-* <strong>Get z-axis average in a given point segment </strong>:
+* <strong>Decode and compress a list of words</strong> (input is a list of encoded words):
     ```sh
-    $ my_tree.get_z_avg(my_point)
+    $ original_list = my_compressor.encode(encoding_table, encoding_list)
+    ```
+* <strong>Encode and compress the list as a unit </strong> (outputs a string):
+    ```sh
+    $ encoding_table, encoded_list = my_compressor.encode(my_list, output_list=False)
+    ```
+* <strong>Decode and compress a list of words</strong> (input is a string):
+    ```sh
+    $ original_list = my_compressor.encode(encoding_table, encoding_list, input_list=False)
     ```
 <br>
 
-## Performance Estimation
-### get_z_avg method
-* I wanted to see how 'fast' the function runs correlated to the number of points in the data set and K (the number of nearest neighbors).
-* 
-* The expectation is that the running time increases logarithmically to the amount of points that were used to build the tree, because running the function is a matter of searching in the tree, and then calculating average over O(K) instances.<br>
-![equation](https://latex.codecogs.com/gif.latex?\textbf{O(f)}&space;=&space;O(log(n)-log(K)&space;&plus;&space;O(K))&space;=&space;O(log(\frac&space;nK)&space;&plus;&space;O(K)))
-*  I ran few toy-checks (under my computer computational limitations) and found out that indeed - the time it takes to perform the function increases logarithmically to the amount of points used to build the tree (for a given K):
-<p align="center">
-  <img src="https://i.im.ge/2021/08/20/PG5ic.png">
-</p>
-<br>
+## Compression Method Testing
+Assuming all inputs are legal and valid, I will perform features testing:
+* <strong>Booting properly: </strong> whenever initialized (in our case, an object of the class is created), nothing crashes.
+* <strong>Encoding properly: </strong> `(functional)`
+  * Returning a list of encoded words and an encoding-table if it was asked to.
+  * Returning an encoding (string) of a list and an encoding-table if it was asked to.
+* <strong>Decoding properly: </strong> `(functional)`
+  * Decoding an encoded list that was encoded by the system (could be a list of encoded words or a string that encodes a list of words - according to the user's request), and that the output is indeed the original list. 
+* <strong>Expected-Encoding: </strong> `(functional)`
+  * Deals with a list that contains only one unique word (of length 1, and of length > 1). Should encode them both as expected (as an empty string) and decode it back to original.
+  * Deals with the same word that is written differently (for example: `['Oren', 'oren']`). Should encode each of the words differently.
+  * Deals with repetitions by giving it random input-lists that contains words with repetitions. Should encode the same words with the same code.
+  * Decoding an encoded list that was not encoded by the system, and that the output is indeed the original list.
+* <strong>The system Compresses its input</strong>: `(functional)` <br>Giving it various types of different lists, generated randomly (with and without repetitions), and checking the size of the original list compared to the encoded list.
+  * Can be helpful to determine not just if the system compresses, but also how well it compresses generally, and in different use cases.
+* <strong> 'Long' inputs: </strong> `(performance)`
+  * Deals with lists that contains many words (with repetitions, and without): Starting with 'small' lists (lets say, 100 words), and increase the amount of words by a constant factor every time. Checking the time of the running CPU and memory usage (are the parameters being checked linear/logarithmic to the input size?).
+* <strong>Outputs in a reasonable time:</strong> `(performance)` <br>Can measure the actual time of a query and compare it to other compressors run-time out there.
+* <strong>Continuity:</strong> `(performance)` <br>  When it is 'online', see how well it works with lots of requests, for a long time.
+
 
 
