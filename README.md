@@ -22,7 +22,7 @@ There are many strategies to compress data, reducing the volume of the data and 
 <br>
 
 ## Requirements
-The Assignment baselines and requirements can be found and downloaded [here](https://github.com/OrenKov/compression-algorithm/blob/main/Compression%20algorithm.docx).
+The assignment baselines and requirements can be found and downloaded [here](https://github.com/OrenKov/compression-algorithm/blob/main/Compression%20algorithm.docx).
 <br>
 
 ## Compression Ways
