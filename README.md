@@ -65,7 +65,6 @@ There system contains 2 ways for encoding and compressing the data:
 
 ## Compression Method Testing
 Assuming all inputs are legal and valid, I will perform features testing:
-* <strong>Booting properly: </strong> whenever initialized (in our case, an object of the class is created), nothing crashes.
 * <strong>Encoding properly: </strong> `(functional)`
   * Returning a list of encoded words and an encoding-table if it was asked to.
   * Returning an encoding (string) of a list and an encoding-table if it was asked to.
